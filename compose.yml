@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: 'no'
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_USER: blogger
+      POSTGRES_DB: db_blog
+    volumes:
+      - storage_blog:/var/lib/postgresql/data
+      - ./schema:/docker-entrypoint-initdb.d
+    ports:
+      - '5432:5432'
+    secrets:
+      - db_password
+secrets:
+  db_password:
+    file: db_password.txt
+volumes:
+  storage_blog:
