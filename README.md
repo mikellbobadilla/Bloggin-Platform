@@ -2,6 +2,8 @@
 
 Consiste en crear una API RESTful para un blog personal. La API debe permitir a los usuarios realizar:
 
+Link del [Proyecto](https://roadmap.sh/projects/blogging-platform-api)
+
 - Crear un nuevo post
 - Actualizar un post existente
 - Eliminar un post
