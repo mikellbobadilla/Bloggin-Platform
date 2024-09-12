@@ -1,7 +1,8 @@
 services:
   db:
+    container_name: Blogging-db
     image: postgres:16-alpine
-    restart: 'no'
+    restart: 'always'
     environment:
       POSTGRES_PASSWORD_FILE: /run/secrets/db_password
       POSTGRES_USER: blogger
@@ -9,8 +10,23 @@ services:
     volumes:
       - storage_blog:/var/lib/postgresql/data
       - ./schema:/docker-entrypoint-initdb.d
+    secrets:
+      - db_password
+  app:
+    container_name: Blogging-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    mem_limit: 800m
+    restart: 'always'
     ports:
-      - '5432:5432'
+      - '8080:8080'
+    environment:
+      DB_HOST: db:5432/db_blog
+      DB_USER: blogger
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    depends_on:
+      - db
     secrets:
       - db_password
 secrets:
