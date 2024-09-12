@@ -1,15 +1,15 @@
 # Blogging Platform API
 
-Consiste en crear una API RESTful para un blog personal. La API debe permitir a los usuarios realizar:
+La API RESTful permite gestionar un blog personal con las siguientes funcionalidades:
 
-Link del [Proyecto](https://roadmap.sh/projects/blogging-platform-api)
+- **Crear un nuevo post**.
+- **Actualizar un post existente**.
+- **Eliminar un post**.
+- **Obtener un solo post**.
+- **Obtener todos los posts**.
+- **Filtrar posts por búsqueda**.
 
-- Crear un nuevo post
-- Actualizar un post existente
-- Eliminar un post
-- Obtener un solo post
-- Obtener todos los posts
-- Filtrar los posts por búsqueda
+**Enlace del Proyecto:** [Blogging Platform API](https://roadmap.sh/projects/blogging-platform-api)
 
 ## Guía para Levantar el Proyecto
 
@@ -94,169 +94,48 @@ docker compose up -d
 
 ## Stack
 
-El proyecto está construido con `Spring Boot v.3.3.3`.
+El proyecto utiliza `Spring Boot v.3.3.3` con las siguientes dependencias:
 
-Las dependencias que utiliza son:
+- **Spring Web**: Para construir la API.
+- **Spring JPA con Hibernate**: Para el mapeo de entidades.
+- **Spring Validations**: Para la validación de datos de entrada.
+- **Driver de PostgreSQL**: Base de datos principal.
+- **Driver de H2**: Base de datos para testing.
+- **Lombok**: Para reducir código repetitivo.
 
-- Spring web - Para construir la API
-- Spring Jpa con Hibernate - Para mapear las clases con las entidades
-- Driver de PostgreSQL - como bases de datos
-- Driver de H2 - para testing
-- lombok - Para evitar boilerplate
+## Operaciones de la API
 
-## Crear un Post
+### Crear un Post
 
-Para crear un post se tiene que usar el método `POST`
+**Endpoint:** `POST /posts`
 
-**Endpoint: POST /posts**
+- Crea un post con datos validados.
+- Respuesta: `201 Created` con el contenido creado o `400 Bad Request` si hay errores.
 
-```JSON
-{
-  "title": "Mi primer post",
-  "content": "Este es el contenido de mi primer post",
-  "category": "Tecnología",
-  "tags": [
-    "Programación",
-    "Bases de datos"
-  ]
-}
-```
+### Actualizar un Post
 
-El endpoint debería validar el cuerpo de la request y retornar un código de respuesta `201 Created` con el contenido
-creado:
+**Endpoint:** `PUT /posts/{id}`
 
-````JSON
-{
-  "id": 1,
-  "title": "Mi primer post",
-  "content": "Este es el contenido de mi primer post",
-  "category": "Tecnología",
-  "tags": [
-    "Programación",
-    "Bases de datos"
-  ],
-  "createAt": "2021-09-01T12:00:00Z",
-  "updatedAt": "2021-09-01T12:00:00Z"
-}
-````
+- Actualiza un post existente.
+- Respuesta: `200 OK` con contenido actualizado, `400 Bad Request` por validaciones, o `404 Not Found` si no existe.
 
-Si hay un error de validación tiene que retornar un código de respuesta `400 Bad Request`
+### Eliminar un Post
 
-## Actualizar un Post
+**Endpoint:** `DELETE /posts/{id}`
 
-Actualizar un post existente usando el método `PUT`
+- Elimina un post.
+- Respuesta: `204 No Content` si se eliminó o `404 Not Found` si no existe.
 
-**Endpoint: PUT /posts/1**
+### Obtener un Post
 
-```JSON
-{
-  "title": "Mi post actualizado",
-  "content": "Este es el contenido actualizado de mi primer post",
-  "category": "Tecnología",
-  "tags": [
-    "Programación",
-    "Bases de datos"
-  ]
-}
-```
+**Endpoint:** `GET /posts/{id}`
 
-El endpoint debería validar el cuerpo de la request y retornar un código de respuesta `200 OK` con el contenido
-actualizado del post
+- Devuelve un post específico.
+- Respuesta: `200 OK` si existe o `404 Not Found` si no.
 
-````JSON
-{
-  "id": 1,
-  "title": "Mi post actualizado",
-  "content": "Este es el contenido actualizado de mi primer post",
-  "category": "Tecnología",
-  "tags": [
-    "Programación",
-    "Bases de datos"
-  ],
-  "createAt": "2021-09-01T12:00:00Z",
-  "updatedAt": "2021-09-01T12:30:00Z"
-}
-````
+### Obtener todos los Posts
 
-Si hay un error de validación tiene que retornar un código de respuesta `400 Bad Request`.
+**Endpoint:** `GET /posts`
 
-Si no existe el post deberá retornar un código de respuesta `404 Not Found`
-
-## Eliminar un Post
-
-Para eliminar un post se tiene que usar el método `DELETE`
-
-**Endpoint: DELETE /posts/1**
-
-El endpoint tiene que retornar un `204 No Content` si el post fué eliminado correctamente ó `404 Not Found` si el post
-no existe
-
-## Obtener un Post
-
-Para obtener un post se tiene que usar el método `GET`
-
-**Endpoint: /posts/1**
-
-El endpoint deberá retornar un código de respuesta `200 OK` sí el post existe
-
-```JSON
-{
-  "id": 1,
-  "title": "Mi primer post",
-  "content": "Este es el contenido de mi primer post",
-  "category": "Tecnología",
-  "tags": [
-    "Programación",
-    "Bases de datos"
-  ],
-  "createAt": "2021-09-01T12:00:00Z",
-  "updatedAt": "2021-09-01T12:00:00Z"
-}
-```
-
-En caso de que no exista el post deberá retornar un código de respuesta `404 Not Found`
-
-## Obtener todos los posts
-
-Para obtener todos los posts se tiene que usar el método `GET`
-
-**Endpoint: /posts**
-
-El endpoint tiene que retornar un código de respuesta `200 OK` con el contenido.
-
-```JSON
-[
-  {
-    "id": 1,
-    "title": "Mi primer post",
-    "content": "Este es el contenido de mi primer post",
-    "category": "Tecnología",
-    "tags": [
-      "Programación",
-      "Bases de datos"
-    ],
-    "createAt": "2021-09-01T12:00:00Z",
-    "updatedAt": "2021-09-01T12:00:00Z"
-  },
-  {
-    "id": 2,
-    "title": "Mi segundo post",
-    "content": "Este es el contenido de mi segundo post",
-    "category": "Tecnología",
-    "tags": [
-      "Programación",
-      "Bases de datos"
-    ],
-    "createAt": "2021-09-01T12:00:00Z",
-    "updatedAt": "2021-09-01T12:00:00Z"
-  }
-]
-```
-
-Mientras se está recuperando los posts, el usuario puede filtrar los posts por búsqueda.
-
-La búsqueda se tiene que hacer por los campos: Título, Contenido o Categoría. Ejemplo:
-
-**GET /posts?term=tech**
-
-Tendría que retornar una lista de posts que tengan el término `tech` en el título, contenido o categoría.
+- Devuelve todos los posts o filtra por búsqueda.
+- Respuesta: `200 OK` con los posts.
